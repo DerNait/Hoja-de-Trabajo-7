@@ -1,3 +1,7 @@
+/* Hoja de Trabajo 7
+ * Kevin Josué Villagrán Mérida
+ * 23584
+ */
 import java.util.Comparator;
 import java.util.Scanner;
 import java.io.BufferedReader;
@@ -30,18 +34,24 @@ public class TranslatorMain {
             String choice = scanner.nextLine();
             switch (choice) {
                 case "1":
-                    translateText(englishTree);
+                    translateText(englishTree, spanishTree, frenchTree, "Spanish");
                     break;
                 case "2":
-                    printOrderedWords(englishTree);
+                    translateText(englishTree, spanishTree, frenchTree, "English");
                     break;
                 case "3":
-                    printOrderedWords(spanishTree);
+                    translateText(englishTree, spanishTree, frenchTree, "French");
                     break;
                 case "4":
-                    printOrderedWords(frenchTree);
+                    printOrderedWords(englishTree);
                     break;
                 case "5":
+                    printOrderedWords(spanishTree);
+                    break;
+                case "6":
+                    printOrderedWords(frenchTree);
+                    break;
+                case "7":
                     System.out.println("Exiting...");
                     System.exit(0);
                 default:
@@ -65,40 +75,58 @@ public class TranslatorMain {
         }
     }
 
-    private static void translateText(BinarySearchTree<String, Association<String, String, String>> englishTree) {
-        String languageTo = "Spanish";
-    
+    private static void translateText(BinarySearchTree<String, Association<String, String, String>> englishTree,
+                                    BinarySearchTree<String, Association<String, String, String>> spanishTree,
+                                    BinarySearchTree<String, Association<String, String, String>> frenchTree,
+                                    String targetLanguage) {
         try (BufferedReader br = new BufferedReader(new FileReader("data/texto.txt"))) {
             StringBuilder translatedText = new StringBuilder();
             String line;
+
             while ((line = br.readLine()) != null) {
-                String[] tokens = line.split(" "); //Separa la linea en tokens separados por un espacio.
+                String[] tokens = line.split("\\s+");
                 for (String token : tokens) {
-                    String word = token.replaceAll("[^a-zA-Z]", ""); //Quita los signos de puntuacion.
-                    String lowerCaseWord = word.toLowerCase();
-                    String punctuation = token.replace(word, "");
-    
-                    Association<String, String, String> found = englishTree.find(lowerCaseWord);
-                    if (found != null) {
-                         // Se agrega la palabra traducida a mi variable translatedText
-                        String translatedWord = languageTo.equals("Spanish") ? found.getValue1() : found.getValue2();
-                        translatedText.append(translatedWord);
-                    } else {
-                         // Si no encuentra la palabra, mantiene la original
-                        translatedText.append("*"+word+"*");
-                    }
-                    translatedText.append(punctuation).append(" "); //Agrega la puntuacion y el espacio al final de la palabra
+                    // Consideramos que la palabra puede estar en cualquiera de los tres idiomas
+                    String lowerCaseWord = token.toLowerCase();
+                    String translatedWord = findAndTranslate(lowerCaseWord, englishTree, spanishTree, frenchTree, targetLanguage);
+                    translatedText.append(translatedWord).append(" ");
                 }
             }
+
             if (translatedText.length() > 0) {
-                translatedText.deleteCharAt(translatedText.length() - 1); //Quita el ultimo espacio
+                translatedText.deleteCharAt(translatedText.length() - 1); // Eliminar el último espacio
             }
+
             System.out.println(translatedText.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-       
+
+    private static String findAndTranslate(String word, 
+        BinarySearchTree<String, Association<String, String, String>> englishTree,
+        BinarySearchTree<String, Association<String, String, String>> spanishTree,
+        BinarySearchTree<String, Association<String, String, String>> frenchTree,
+        String targetLanguage) {
+        Association<String, String, String> found = englishTree.find(word);
+        if (found == null) {
+            found = spanishTree.find(word);
+        }
+        if (found == null) {
+            found = frenchTree.find(word);
+        }
+        if (found != null) {
+            switch (targetLanguage) {
+                case "Spanish":
+                    return found.getValue1(); // Traducción a Español
+                case "English":
+                    return found.getKey(); // Traducción a Inglés
+                case "French":
+                    return found.getValue2(); // Traducción a Francés
+            }
+        }
+        return "*" + word + "*"; // Si no se encuentra la palabra, se devuelve marcada
+    }
 
     private static void printOrderedWords(BinarySearchTree<String, Association<String, String, String>> tree) {
         IWalk<Association<String, String, String>> printWalk = association -> {

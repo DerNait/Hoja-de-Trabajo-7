@@ -1,3 +1,6 @@
+/*
+ * RECUPERADO DEL GITHUB DE LOS EJEMPLOS DE CLASE
+ */
 public class TreeNode<K, V> {
     
     private K key;

@@ -1,3 +1,6 @@
+/*
+ * RECUPERADO DEL GITHUB DE LOS EJEMPLOS DE CLASE
+ */
 public interface ITree<K, V>{
 
     void insert(K key, V value);

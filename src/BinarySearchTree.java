@@ -1,3 +1,6 @@
+/*
+ * RECUPERADO DEL GITHUB DE LOS EJEMPLOS DE CLASE
+ */
 import java.util.Comparator;
 
 public class BinarySearchTree<K, V> implements ITree<K, V> {
