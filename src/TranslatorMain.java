@@ -19,11 +19,13 @@ public class TranslatorMain {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("Escoja una opcion:");
-            System.out.println("1. Traducir texto del archivo 'texto.txt'");
-            System.out.println("2. Imprimir las palabras ordenadas por el idioma: Ingles");
-            System.out.println("3. Imprimir las palabras ordenadas por el idioma: Español");
-            System.out.println("4. Imprimir las palabras ordenadas por el idioma: Frances");
-            System.out.println("5. Exit");
+            System.out.println("1. Traducir texto del archivo 'texto.txt' a Español");
+            System.out.println("2. Traducir texto del archivo 'texto.txt' a Ingles");
+            System.out.println("3. Traducir texto del archivo 'texto.txt' a Frances");
+            System.out.println("4. Imprimir las palabras ordenadas por el idioma: Ingles");
+            System.out.println("5. Imprimir las palabras ordenadas por el idioma: Español");
+            System.out.println("6. Imprimir las palabras ordenadas por el idioma: Frances");
+            System.out.println("7. Exit");
             
             String choice = scanner.nextLine();
             switch (choice) {
@@ -83,7 +85,7 @@ public class TranslatorMain {
                         translatedText.append(translatedWord);
                     } else {
                          // Si no encuentra la palabra, mantiene la original
-                        translatedText.append(word);
+                        translatedText.append("*"+word+"*");
                     }
                     translatedText.append(punctuation).append(" "); //Agrega la puntuacion y el espacio al final de la palabra
                 }
